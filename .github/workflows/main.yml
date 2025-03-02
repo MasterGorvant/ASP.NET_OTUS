@@ -46,7 +46,7 @@ jobs:
     - name: Run tests (optional)
       run: |
         # curl для проверки работы веб-сервиса
-        curl http://localhost:5001/index.html
+        curl https://localhost:5001/swagger/index.html
 
     - name: Stop and remove containers
       run: |
