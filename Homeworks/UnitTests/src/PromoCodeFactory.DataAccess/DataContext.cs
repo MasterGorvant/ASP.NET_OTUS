@@ -21,7 +21,6 @@ namespace PromoCodeFactory.DataAccess
 
         public DataContext()
         {
-            
         }
         
         public DataContext(DbContextOptions<DataContext> options)
