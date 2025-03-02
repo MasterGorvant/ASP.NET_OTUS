@@ -46,7 +46,7 @@ jobs:
     - name: Run tests (optional)
       run: |
         # curl для проверки работы веб-сервиса
-        curl http://localhost:5000/index.html
+        curl http://localhost:5001/index.html
 
     - name: Stop and remove containers
       run: |
