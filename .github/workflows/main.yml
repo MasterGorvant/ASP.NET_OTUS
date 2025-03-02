@@ -9,14 +9,11 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Homeworks\UnitTests\src
 
     steps:
-    - name: ls
-      run: ls
-      
-    - name: Go to directory
-      run: cd Homeworks\UnitTests\src
-      
     - name: Checkout code
       uses: actions/checkout@v3
 
