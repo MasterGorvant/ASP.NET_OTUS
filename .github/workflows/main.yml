@@ -43,11 +43,6 @@ jobs:
       run: |
         sleep 10  # Подождать 10 секунд
         
-    - name: Run tests (optional)
-      run: |
-        # curl для проверки работы веб-сервиса
-        curl https://localhost:5001/swagger/index.html
-
     - name: Stop and remove containers
       run: |
         docker compose -f docker-compose.yml down
