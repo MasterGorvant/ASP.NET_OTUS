@@ -26,7 +26,8 @@ services:
   promocodefactory.webhost:
     image: ${DOCKER_REGISTRY-}promocodefactorywebhost
     ports:
-      - "5000:8080"
+      - 5000:8080
+      - 5001:8081
     build:
       context: .
       dockerfile: PromoCodeFactory.WebHost/Dockerfile
