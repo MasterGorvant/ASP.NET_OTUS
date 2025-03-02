@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: ls
+      run: ls
+      
     - name: Go to directory
       run: cd Homeworks\UnitTests\src
       
