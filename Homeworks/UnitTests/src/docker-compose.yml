@@ -1,0 +1,43 @@
+services:
+
+  #Db
+  promocode-factory-db:
+    image: "postgres:latest"
+    container_name: 'promocode-factory-db'
+    restart: always 
+    ports:
+      - 5433:5432
+    environment: 
+      PGUSER: postgres
+      POSTGRES_DB: promocode_factory_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - network1
+    volumes:
+      - promocode_factory_postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+#Api
+  promocodefactory.webhost:
+    image: ${DOCKER_REGISTRY-}promocodefactorywebhost
+    ports:
+      - "5000:8080"
+    build:
+      context: .
+      dockerfile: PromoCodeFactory.WebHost/Dockerfile
+    environment:
+      ConnectionStrings:PromoCodeFactoryDb: "Host=promocode-factory-db;Port=5432;Database=promocode_factory_db;Username=postgres;Password=postgres"
+    networks:
+      - network1
+
+networks:
+   network1:
+        driver: bridge
+
+volumes:
+  promocode_factory_postgres_data:
