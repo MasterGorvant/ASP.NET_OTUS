@@ -1,0 +1,53 @@
+name: Docker Compose Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Go to directory
+      run: cd Homeworks\UnitTests\src
+      
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+
+    - name: Set up Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Validate docker-compose.yml
+      run: |
+        docker compose -f docker-compose.yml config
+
+    - name: Build Docker images
+      run: |
+        docker compose -f docker-compose.yml build
+
+    - name: Start Docker containers
+      run: |
+        docker compose -f docker-compose.yml up -d
+
+    - name: Check if containers are running
+      run: |
+        docker compose ps
+        
+    - name: Wait for service to start
+      run: |
+        sleep 10  # Подождать 10 секунд
+        
+    - name: Run tests (optional)
+      run: |
+        # curl для проверки работы веб-сервиса
+        curl http://localhost:5000/index.html
+
+    - name: Stop and remove containers
+      run: |
+        docker compose -f docker-compose.yml down
