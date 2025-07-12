@@ -8,11 +8,27 @@ services:
       - 5433:5432
     environment: 
       - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=promocode_factory_administration_db
 
   #Administration Api
-  promocode-factory-administration-api:
-    build: src/Pcf.Administration/
-    container_name: 'promocode-factory-administration-api'
+  # promocode-factory-administration-api:
+  #   image: ${DOCKER_REGISTRY-}pcfadministrationwebhost
+  #   build:
+  #     context: .
+  #     dockerfile: Pcf.Administration/Pcf.Administration.WebHost/Dockerfile
+  #   restart: always
+  #   ports:
+  #     - "8091:8080"
+  #   environment:
+  #     - "ConnectionStrings:PromocodeFactoryAdministrationDb=Host=promocode-factory-administration-db;Database=promocode_factory_administration_db;Username=postgres;Password=docker"          
+  #   depends_on: 
+  #     - promocode-factory-administration-db
+
+  pcf.administration.webhost:
+    image: ${DOCKER_REGISTRY-}pcfadministrationwebhost
+    build:
+      context: .
+      dockerfile: Pcf.Administration/Pcf.Administration.WebHost/Dockerfile
     restart: always
     ports:
       - "8091:8080"
@@ -34,7 +50,7 @@ services:
 
   #ReceivingFromPartner Api
   promocode-factory-receiving-from-partner-api:
-    build: src/Pcf.ReceivingFromPartner/
+    build: Pcf.ReceivingFromPartner/Pcf.ReceivingFromPartner.WebHost/
     container_name: 'promocode-factory-receiving-from-partner-api'
     restart: always
     ports:
@@ -58,7 +74,7 @@ services:
 
   #GivingToCustomer Api
   promocode-factory-giving-to-customer-api:
-    build: src/Pcf.GivingToCustomer/
+    build: Pcf.GivingToCustomer/Pcf.GivingToCustomer.WebHost/
     container_name: 'promocode-factory-giving-to-customer-api'
     restart: always
     ports:
@@ -70,4 +86,5 @@ services:
       
  #networks:
   # app_network:
-   #  driver: bridge     
+   #  driver: bridge     services:
+  
