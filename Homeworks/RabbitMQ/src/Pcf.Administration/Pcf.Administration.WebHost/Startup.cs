@@ -10,6 +10,12 @@ using Pcf.Administration.DataAccess.Repositories;
 using Pcf.Administration.DataAccess.Data;
 using Pcf.Administration.Core.Abstractions.Repositories;
 using System;
+using Pcf.Administration.Core.Settings;
+using Pcf.Administration.WebHost.Services;
+using RabbitMQ.Client;
+using System.Threading.Tasks;
+using Castle.Core.Configuration;
+using Pcf.Administration.WebHost.Consumers;
 
 namespace Pcf.Administration.WebHost
 {
@@ -28,6 +34,15 @@ namespace Pcf.Administration.WebHost
         {
             services.AddControllers().AddMvcOptions(x =>
                 x.SuppressAsyncSuffixInActionNames = false);
+
+            services.Configure<RmqSettings>(Configuration.GetSection(nameof(RmqSettings)));
+
+            services.AddScoped<EmployeeService, EmployeeService>();
+
+            //Правильнее сделать консюмер BackgroundService-ом. Пока что для теста сделано так
+            services.AddHostedService<Consumer>();
+            
+
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbInitializer, EfDbInitializer>();
             services.AddDbContext<DataContext>(x =>
@@ -76,5 +91,7 @@ namespace Pcf.Administration.WebHost
 
             dbInitializer.InitializeDb();
         }
+
+        
     }
 }

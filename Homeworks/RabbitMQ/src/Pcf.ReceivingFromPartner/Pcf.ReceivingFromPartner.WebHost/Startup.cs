@@ -12,6 +12,7 @@ using Pcf.ReceivingFromPartner.DataAccess;
 using Pcf.ReceivingFromPartner.DataAccess.Repositories;
 using Pcf.ReceivingFromPartner.DataAccess.Data;
 using Pcf.ReceivingFromPartner.Integration;
+using Pcf.ReceivingFromPartner.Core.Settings;
 
 namespace Pcf.ReceivingFromPartner.WebHost
 {
@@ -30,6 +31,8 @@ namespace Pcf.ReceivingFromPartner.WebHost
         {
             services.AddControllers().AddMvcOptions(x =>
                 x.SuppressAsyncSuffixInActionNames = false);
+            services.Configure<RmqSettings>(Configuration.GetSection(nameof(RmqSettings)));
+            services.AddSingleton<NotificationService, NotificationService>();
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<INotificationGateway, NotificationGateway>();
             services.AddScoped<IDbInitializer, EfDbInitializer>();
@@ -39,10 +42,7 @@ namespace Pcf.ReceivingFromPartner.WebHost
                 c.BaseAddress = new Uri(Configuration["IntegrationSettings:GivingToCustomerApiUrl"]);
             });
 
-            services.AddHttpClient<IAdministrationGateway, AdministrationGateway>(c =>
-            {
-                c.BaseAddress = new Uri(Configuration["IntegrationSettings:AdministrationApiUrl"]);
-            });
+            services.AddScoped<IAdministrationGateway, AdministrationGateway>();
 
             services.AddDbContext<DataContext>(x =>
             {
