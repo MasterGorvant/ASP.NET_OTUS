@@ -1,4 +1,5 @@
 ﻿using Pcf.Administration.DataAccess;
+using System;
 using System.Threading.Tasks;
 
 namespace Pcf.Administration.DataAccess.Data
@@ -15,10 +16,13 @@ namespace Pcf.Administration.DataAccess.Data
 
         public void InitializeDb()
         {
-            //_dataContext.Database.EnsureDeleted();
+            _dataContext.Database.EnsureDeleted();
             _dataContext.Database.EnsureCreated();
 
+            
             _dataContext.AddRange(FakeDataFactory.Employees);
+            
+            
             _dataContext.SaveChanges();
         }
     }
